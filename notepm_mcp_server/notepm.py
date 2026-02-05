@@ -45,7 +45,7 @@ class SearchParams(BaseModel):
         include_archived (int): アーカイブされたページを含めるかどうか (0: 含めない, 1: 含める)
         note_code (Optional[str]): ノートコードによるフィルタリング
         tag_name (Optional[str]): タグ名によるフィルタリング
-        created (Optional[str]): 作成日によるフィルタリング
+        created (Optional[str]): 作成者（ユーザーコード）によるフィルタリング
         page (int): ページ番号 (デフォルト: 1)
         per_page (int): 1ページあたりの結果数 (デフォルト: 10)
     """
