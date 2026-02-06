@@ -108,6 +108,51 @@ uv run notepm-mcp-server
 
 ### Docker利用時のMCPクライアント設定
 
+コンテナの重複起動を防ぐため、付属の `run.sh` ラッパースクリプトを使用することを推奨します。
+このスクリプトは起動前に同名のコンテナを自動的に停止・削除します。
+
+```json
+{
+  "mcpServers": {
+    "notepm-mcp-server": {
+      "command": "bash",
+      "args": [
+        "/<path to>/notepm-mcp-server/run.sh"
+      ],
+      "env": {
+        "NOTEPM_TEAM": "your-team-name",
+        "NOTEPM_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
+
+`run.sh` はデフォルトで `notepm-mcp-server` というコンテナ名を使用します。
+複数のチーム用に別々のインスタンスが必要な場合は、引数でコンテナ名を指定できます：
+
+```json
+{
+  "mcpServers": {
+    "notepm-mcp-server": {
+      "command": "bash",
+      "args": [
+        "/<path to>/notepm-mcp-server/run.sh",
+        "notepm-team-a"
+      ],
+      "env": {
+        "NOTEPM_TEAM": "team-a",
+        "NOTEPM_API_TOKEN": "your-api-token"
+      }
+    }
+  }
+}
+```
+
+#### `run.sh` を使わない場合
+
+`docker run` を直接使う場合は `--name` と `--rm` を指定してください：
+
 ```json
 {
   "mcpServers": {
@@ -115,6 +160,7 @@ uv run notepm-mcp-server
       "command": "docker",
       "args": [
         "run", "-i", "--rm",
+        "--name", "notepm-mcp-server",
         "-e", "NOTEPM_TEAM",
         "-e", "NOTEPM_API_TOKEN",
         "ghcr.io/dynamis-jp/notepm-mcp-server"
@@ -127,6 +173,9 @@ uv run notepm-mcp-server
   }
 }
 ```
+
+> **注意**: `--name` を指定すると同名コンテナが既に存在する場合にエラーになります。
+> `run.sh` を使うと自動的に古いコンテナを停止してから起動するため、この問題を回避できます。
 
 ## ツールの使用例
 

@@ -13,5 +13,9 @@ COPY notepm_mcp_server ./notepm_mcp_server
 # Install dependencies
 RUN uv sync --frozen --no-cache
 
+# Ensure Python receives signals directly (no buffering, PID 1)
+ENV PYTHONUNBUFFERED=1
+STOPSIGNAL SIGTERM
+
 # Run the server
 CMD ["uv", "run", "notepm-mcp-server"]
